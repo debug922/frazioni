@@ -82,5 +82,73 @@ namespace frazioni {
 				return _numeratore.ToString();
 			return _numeratore + "/" + _denominatore;
 		}
+
+		public override bool Equals(object obj)
+		{
+			if (!(obj is Frazioni))
+				return  false;
+			Frazioni fr = (Frazioni) obj;
+			if (fr.Numeratore == 0 && Numeratore == 0)
+				return true;
+			return Numeratore==fr.Numeratore && Denominatore==fr.Denominatore;
+		}
+
+		protected bool Equals(Frazioni other)
+		{
+			return Equals((object)other);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return (_numeratore * 397) ^ _denominatore;
+			}
+		}
+
+		public int Conversion()
+		{
+			if(Denominatore>1)
+				throw  new ArgumentException("Conversione");
+			return Numeratore;
+		}
+
+		public static Frazioni operator +(Frazioni f1, Frazioni f2)
+		{
+			//x1/y1+x2/y2=((x1*y2)+(x2*y1))/(y1*y2)
+			int n = f1.Numeratore * f2.Denominatore + f2.Numeratore * f1.Denominatore;
+			if (n == 0)
+				return new Frazioni(n, 1);
+
+			return new Frazioni(n, f1.Denominatore * f2.Denominatore);
+
+		}
+		public static Frazioni operator -(Frazioni f1, Frazioni f2) {
+			//x1/y1-x2/y2=((x1*y2)-(x2*y1))/(y1*y2)
+			int n = f1.Numeratore * f2.Denominatore - f2.Numeratore * f1.Denominatore;
+			if(n==0)
+				return new Frazioni(n,1);
+
+			return new Frazioni(n, f1.Denominatore * f2.Denominatore);
+
+
+		}
+		public static Frazioni operator *(Frazioni f1, Frazioni f2) {
+			//(x1 / y1) * (x2 / y2) = (x1 * x2) / (y1 * y2)
+			if(f1.Numeratore==0 || f2.Numeratore==0)
+				return  new Frazioni(0,1);
+
+			return new Frazioni(f1.Numeratore * f2.Numeratore ,f1.Denominatore * f2.Denominatore);
+
+		}
+		public static Frazioni operator /(Frazioni f1, Frazioni f2) {
+			//se x2<>0, (x1/y1)/(x2/y2)=(x1*y2)/(y1*x2)
+			if(f2.Numeratore==0)
+				throw new ArgumentException("diviso 0");
+
+			return new Frazioni(f1.Numeratore * f2.Denominatore, f1.Denominatore * f2.Numeratore);
+
+		}
+
 	}
 }
