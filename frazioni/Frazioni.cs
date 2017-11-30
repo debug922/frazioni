@@ -49,16 +49,21 @@ namespace frazioni {
 				throw new ArgumentException("zero");
 			if (_denominatore < 0)
 			{
-				_numeratore = -1 * _numeratore;
-				_denominatore = -1 * _denominatore;
+				_numeratore = Abs(_numeratore);
+				_denominatore = Abs(_denominatore);
 				
 			}
+		}
+
+		private int Abs(int n )
+		{
+			return -1 *n;
 		}
 
 		private void CheckFrazione()
 		{
 			
-			int mcd = _numeratore<0 ? Mcd(-1*_numeratore, _denominatore) : Mcd(_numeratore, _denominatore);
+			int mcd = _numeratore<0 ? Mcd(Abs(_numeratore), _denominatore) : Mcd(_numeratore, _denominatore);
 			if (mcd > 1)
 			{
 				_numeratore/=mcd;
